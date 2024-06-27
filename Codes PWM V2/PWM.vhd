@@ -34,15 +34,16 @@ architecture RTL of PWM is
 
 	component divf
 		port (
-			s_clk: in std_logic;
-			s_SEL_PR: in std_logic_vector(1 downto 0);
-			Q1, Q2, Q3, Q4, OUT_CLK: out std_logic
+			s_clk		: in std_logic;
+			rst   		: in std_logic;
+			s_SEL_PR	: in std_logic_vector(1 downto 0);
+			OUT_CLK		: out std_logic
 		);
 	end component;
 	
 	begin
 	
-	U0 : divf port map (CLK, RST, SEL_PR, Q1, Q2, Q3, Q4, s_OUT_CLK);
+	U0 : divf port map (CLK, RST, SEL_PR, s_OUT_CLK);
 
 --		SW_s <= SW;  -- Lembrar de religar os SW para placa
 --		DUTY <= SW_s;
