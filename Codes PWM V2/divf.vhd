@@ -56,28 +56,28 @@ begin
             s_rst => rst,
             Q => clk8             -- CLK divido por 8
         );
-    
+   
     df4: JK_FF
         port map(
             J =>jk_input,
             k =>jk_input,
             s_clk => clk8,
-            s_rst => s_rst,
+            s_rst => rst,
             Q => clk16               -- CLK divido por 16
         );
 
     ---------- Lembrando que a frequencia é divida 2^n, onde n é o numero de FF 
     ---------- F_clk = CLk / 2^n
 
-    process (s_SEL_PR)
+    process (clk)
     begin 
 
                 case s_SEL_PR is
 
-                    when "00" => OUT_CLK <= clk16      -- CLK/16
-                    when "10" => OUT_CLK <= clk8      -- CLK/8
-                    when "01" => OUT_CLK <= clk4       -- CLK/4
-                    when others => OUT_CLK <= clk2   -- CLK/2
+                    when "00" => OUT_CLK <= clk16;      -- CLK/16
+                    when "10" => OUT_CLK <= clk8;      -- CLK/8
+                    when "01" => OUT_CLK <= clk4;       -- CLK/4
+                    when others => OUT_CLK <= clk2;   -- CLK/2
                 
                     end case;
 
