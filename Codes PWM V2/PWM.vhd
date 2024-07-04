@@ -1,21 +1,18 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.std_logic_unsigned.all;
-
 entity PWM is 
     port ( 
         CLK 	 	    : in  std_logic;
         RST 	 	: in  std_logic;
-        ENABLE  	: in  std_logic := '1';
+        ENABLE  	: in  std_logic;
         SEL_PR      : in  std_logic_vector (1 downto 0);
-        SW          : in  std_logic;--_vector (7 downto 0);
-		  periodo_pin : in std_logic;
+        SW          : in  std_logic_vector (7 downto 0);
         led         : out std_logic_vector (7 downto 0);
-		  Read_PWM 	: out std_logic;
+		  PWM_LED 	: out std_logic;
         PWM_OUT 	: out std_logic
     );
 end entity;
-
 architecture RTL of PWM is
 	
 	-- Fclk
@@ -24,14 +21,14 @@ architecture RTL of PWM is
 	--
 	-- TIMER 8bits -> 0 to 255
 	-- PRESCALER   -> 1, 4, or 16
-	
+
 	signal s_OUT_CLK   : std_logic; 
-	signal CYCLE_OFF   : std_logic_vector (7 downto 0):= "00000000";
+	signal CYCLE_OFF   : std_logic_vector (7 downto 0);
 	signal s_PWM_OUT   : std_logic;	
 	signal CONT        : std_logic_vector (7 downto 0) := "00000000";
-	signal TIMER       : std_logic_vector (7 downto 0) := "00000000";
+	signal TIMER       : std_logic_vector (7 downto 0);
 	signal DUTY        : std_logic_vector (7 downto 0) := "00000000";
---	signal SW_s        : std_logic_vector (7 downto 0);
+	signal SW_s        : std_logic_vector (7 downto 0);
 --	signal cont_duty  : std_logic_vector (7 downto 0) := "00000000";
 
 	component divf
@@ -42,9 +39,9 @@ architecture RTL of PWM is
 			OUT_CLK		: out std_logic
 		);
 	end component;
-	
+
 	begin
-	
+
 	U0 : divf 
 		port map(
 			clk => CLK,
@@ -52,23 +49,10 @@ architecture RTL of PWM is
 			s_SEL_PR => SEL_PR,
 			OUT_CLK => s_OUT_CLK
 			);
-	
---		SW_s <= SW;  -- Lembrar de religar os SW para placa
---		DUTY <= SW_s;
-			
-	process(CLK)
-	begin
-			if(rising_edge (CLK)) then
-				if (SW = '1') then
-					DUTY <= "01000000";
-				
-				else 
-					DUTY <= "00000000";
-					
-				end if;
-			end if;
-	end process;	
-			
+
+		SW_s <= SW;  -- Lembrar de religar os SW para placa
+		DUTY <= SW_s;
+
 -----Process para contar o duty para ver na pratica aumentando o Ciclo ON-----		
 --	process(s_PWM_OUT)
 --	begin
@@ -77,30 +61,13 @@ architecture RTL of PWM is
 --				cont_duty <= "00000000";
 --			end if;
 --	end process;
-			
+
 --	DUTY <= cont_duty;
 ------------------------------------------------------------------------------
 
-	process(CLK)
-	begin
-			if(rising_edge (CLK)) then
-				if (periodo_pin = '1') then
-					TIMER <= "01000000";
-				
-				else 
-					TIMER <= "00000000";
-					
-				end if;
-			end if;
-	end process;
-			
-	
---	TIMER <= "01000000";          --Maximo de Pulsos para o Contador e Tamanho maximo da PWM de 0-1
+	TIMER <= "01000000";          --Maximo de Pulsos para o Contador e Tamanho maximo da PWM de 0-1
 	
 	CYCLE_OFF <= TIMER - DUTY - '1';  -- Tamanho do Ciclo off do pulso de PWM
-
-
-	
 	
 	-- CASO ESPECIAL:
 	
@@ -116,9 +83,9 @@ architecture RTL of PWM is
 		elsif( s_OUT_CLK = '1' and s_OUT_CLK'EVENT ) then
 				
 			if( ENABLE = '1' ) then
-					
+
 				CONT <= CONT + '1';   	-- Conta os pulsos do s_CLK_OUT      
-										-- Lembrando que s_CLK_OUT ee: CLK32,CLK16,CLK4,CLK
+							-- Lembrando que s_CLK_OUT ee: CLK32,CLK16,CLK4,CLK
 
 				if ( DUTY >= TIMER ) then         -- Condicao para o PWM 100%
 					s_PWM_OUT <= '1';
@@ -138,12 +105,8 @@ architecture RTL of PWM is
 			end if;
 		end if;
 	end process;
-		
-	led(1) <= SW;
-	led(2) <= SW;
-	led(6) <= periodo_pin;
-	led(7) <= periodo_pin;
---	Read_PWM <= s_PWM_OUT;
-	led(4) <= s_PWM_OUT;
-	
+
+	led <= DUTY;
+	PWM_LED <= s_PWM_OUT;
+
 	end RTL;
