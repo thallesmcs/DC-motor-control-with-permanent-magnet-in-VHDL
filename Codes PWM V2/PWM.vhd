@@ -5,11 +5,9 @@ entity PWM is
     port ( 
         CLK 	 	    : in  std_logic;
         RST 	 	: in  std_logic;
-        ENABLE  	: in  std_logic;
         SEL_PR      : in  std_logic_vector (1 downto 0);
         SW          : in  std_logic_vector (7 downto 0);
         led         : out std_logic_vector (7 downto 0);
-		  PWM_LED 	: out std_logic;
         PWM_OUT 	: out std_logic
     );
 end entity;
@@ -69,11 +67,6 @@ architecture RTL of PWM is
 	
 	CYCLE_OFF <= TIMER - DUTY - '1';  -- Tamanho do Ciclo off do pulso de PWM
 	
-	-- CASO ESPECIAL:
-	
-	with TIMER select
-		PWM_OUT <= s_OUT_CLK and ENABLE and (not RST) when "00000000",   
-					s_PWM_OUT when others;
 		
 	process(s_OUT_CLK,RST)
 	begin
@@ -107,6 +100,6 @@ architecture RTL of PWM is
 	end process;
 
 	led <= DUTY;
-	PWM_LED <= s_PWM_OUT;
+	PWM_OUT <= s_PWM_OUT;
 
 	end RTL;
