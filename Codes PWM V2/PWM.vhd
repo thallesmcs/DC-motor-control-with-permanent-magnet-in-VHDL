@@ -53,9 +53,7 @@ architecture RTL of PWM is
 			s_PWM_OUT <= '0';
 			CONT      <= "00000000";
 		elsif( s_OUT_CLK = '1' and s_OUT_CLK'EVENT ) then
-				
-			if( ENABLE = '1' ) then
-
+							
 				CONT <= CONT + '1';   	-- Conta os pulsos do s_CLK_OUT      
 							-- Lembrando que s_CLK_OUT ee: CLK32,CLK16,CLK4,CLK
 
@@ -71,10 +69,6 @@ architecture RTL of PWM is
 					s_PWM_OUT <= '0';
 				end if;
 					
-			else
-				s_PWM_OUT <= '0'; 
-				CONT      <= "00000000";
-			end if;
 		end if;
 	end process;
 
