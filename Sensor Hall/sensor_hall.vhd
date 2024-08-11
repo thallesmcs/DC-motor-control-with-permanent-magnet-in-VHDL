@@ -2,31 +2,40 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity ent is
+entity sensor_hall is
   port (
-    clock
+    clk       :  in  std_logic;
+    val_hall  :  in  std_logic;
+    rpm       :  out std_logic_vector(7 downto 0)
   ) ;
-end ent;
+end sensor_hall;
 
-architecture arch of ent is
+architecture rpm of sensor_hall is
 
-    signal 
+    signal cont      :  std_logic_vector(7 downto 0);
+    signal val_pos   :  std_logic_vector(7 downto 0);
 
 begin
 
-end arch ; -- arch
+  process(clk)
+  begin
+    if (rising_edge(CLK)) then
+      
+      if (val_hall = 0) then
+          cont <= cont + '1';
+      
+      else 
+          val_pos <= cont;    
+          cont <= '0';
+      end if;
+        
+    end if;
+  end process;
 
-process(CLK)
+rpm <= val_pos;
+      
+end rpm;
 
-if (rising_edge(CLK))
 
-if (val_hall = 0)
-    cont <= cont + '1';
-else 
-    val_pos <= cont;    
-    cont <= '0';
-end if;
-end if;
-end process;
     
 
