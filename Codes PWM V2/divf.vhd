@@ -5,7 +5,7 @@ entity divf is
     port(
         clk                       : in std_logic;
         rst                       : in std_logic;
-        s_SEL_PR                  : in  std_logic_vector (1 downto 0);
+        s_SEL_PR                  : in  std_logic;
         OUT_CLK                   : out std_logic
     );
 end divf;
