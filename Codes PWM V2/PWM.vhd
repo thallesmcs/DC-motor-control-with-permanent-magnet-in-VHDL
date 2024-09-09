@@ -3,11 +3,11 @@ use IEEE.std_logic_1164.all;
 use IEEE.std_logic_unsigned.all;
 entity PWM is 
     port ( 
-        CLK 	 	    : in  std_logic;
+        CLK 	 	: in  std_logic;
         RST 	 	: in  std_logic;
-        SEL_PR      : in  std_logic_vector (1 downto 0);
-        SW          : in  std_logic_vector (7 downto 0);
-        led         : out std_logic_vector (7 downto 0);
+        SEL_PR      	: in  std_logic;
+        SW          	: in  std_logic_vector (7 downto 0);
+        led         	: out std_logic_vector (7 downto 0);
         PWM_OUT 	: out std_logic
     );
 end entity;
@@ -25,7 +25,7 @@ architecture RTL of PWM is
 		port (
 			clk		: in std_logic;
 			rst   		: in std_logic;
-			s_SEL_PR	: in std_logic_vector(1 downto 0);
+			s_SEL_PR	: in std_logic;
 			OUT_CLK		: out std_logic
 		);
 	end component;
