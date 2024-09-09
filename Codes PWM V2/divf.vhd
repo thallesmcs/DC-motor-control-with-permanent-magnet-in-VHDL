@@ -21,7 +21,7 @@ architecture dividendo of divf is
 
 --------Maquina de estados------------
 
-    type estado is (CLK32,CLK16);
+    type estado is (CLK_32,CLK_16);
     signal estado_atual, proximo_estado : estado;
 
 --------------------------------------
@@ -85,47 +85,36 @@ begin
     ---------- Lembrando que a frequencia é divida 2^n, onde n é o numero de FF 
     ---------- F_clk = CLk / 2^n
 
-    sincrono : process (clk, rst, proximo_estado)
-    
+     sincrono : process (clk, rst)
     begin
-    
-    	if (reset = '1') then
-    		estado_atual <= clk32;
-    		
-    	elsif (rising_edge(clk)) then
-    		estado_atual <= proximo_estado;
-    	end if;
-    
+        if (rst = '1') then
+            estado_atual <= CLK_32; -- Inicializa com um estado válido
+        elsif (rising_edge(clk)) then
+            estado_atual <= proximo_estado;
+        end if;
     end process;
     
-    
-    combinacional : process (estado_atual, entrada)
-    
+    combinacional : process (estado_atual, s_SEL_PR)
     begin 
-
-	OUT_CLK <= '0';
-	
+        OUT_CLK <= '0';
+        
         case estado_atual is
-
-            when CLK32 => OUT_CLK <= '0';
-            
-            	if(s_SEL_PR = '1') then
-            		proximo_estado <= clk16;
-            	else
-            		proximo_estado <= clk32;
-		end if;
-	    
-	    when CLK16 => OUT_CLK <= '1';
-	    
-            	if(s_SEL_PR = '1') then
-            		proximo_estado <= clk32;
-            	else
-            		proximo_estado <= clk16;
-		end if;
-
+            when CLK_32 =>
+                OUT_CLK <= clk32;
+                if s_SEL_PR = '1' then
+                    proximo_estado <= CLK_16;
+                else
+                    proximo_estado <= CLK_32;
+                end if;
+                
+            when CLK_16 =>
+                OUT_CLK <= clk16;
+                if s_SEL_PR = '1' then
+                    proximo_estado <= CLK_32;
+                else
+                    proximo_estado <= CLK_16;
+                end if;
         end case;
-	
-
     end process;
 
 end dividendo;
