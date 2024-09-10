@@ -6,6 +6,7 @@ entity divf is
         clk                       : in std_logic;
         rst                       : in std_logic;
         s_SEL_PR                  : in  std_logic;
+        d_sel                     : out std_logic
         OUT_CLK                   : out std_logic
     );
 end divf;
@@ -85,23 +86,47 @@ begin
     ---------- Lembrando que a frequencia é divida 2^n, onde n é o numero de FF 
     ---------- F_clk = CLk / 2^n
 
-     sincrono : process (clk, rst)
+-------Debounce do botão BTN0---------
+
+    Debounce :Process(CLK)
+    
+    begin
+    
+        If rising_edge(CLK) then
+        
+            clk2 <= s_SEL_PR;
+            
+            clk2 <= clk2;
+            
+            clk8 <= clk2;
+        
+        end if;
+    
+    end process;
+
+    d_sel <= clk2 and clk4 and clk8; 
+
+--------------------------------------
+
+--------Maquina de estados------------
+
+    sincrono : process (clk, rst)
     begin
         if (rst = '1') then
-            estado_atual <= CLK_32; -- Inicializa com um estado válido
+            estado_atual <= CLK_32;
         elsif (rising_edge(clk)) then
             estado_atual <= proximo_estado;
         end if;
     end process;
     
-    combinacional : process (estado_atual, s_SEL_PR)
+    combinacional : process (estado_atual, d_sel)
     begin 
         OUT_CLK <= '0';
         
         case estado_atual is
             when CLK_32 =>
                 OUT_CLK <= clk32;
-                if s_SEL_PR = '1' then
+                if d_sel = '1' then
                     proximo_estado <= CLK_16;
                 else
                     proximo_estado <= CLK_32;
@@ -109,12 +134,15 @@ begin
                 
             when CLK_16 =>
                 OUT_CLK <= clk16;
-                if s_SEL_PR = '1' then
+                if d_sel = '1' then
                     proximo_estado <= CLK_32;
                 else
                     proximo_estado <= CLK_16;
                 end if;
         end case;
     end process;
+
+--------------------------------------
+
 
 end dividendo;
