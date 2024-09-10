@@ -6,19 +6,21 @@ entity divf is
         clk                       : in std_logic;
         rst                       : in std_logic;
         s_SEL_PR                  : in  std_logic;
-        d_sel                     : out std_logic
         OUT_CLK                   : out std_logic
     );
 end divf;
 
 architecture dividendo of divf is
     signal jk_input : std_logic := '1';
+	 --signal d_k_input : std_logic := '0';
     
     signal clk2    : std_logic; 
     signal clk4    : std_logic;
     signal clk8    : std_logic;
     signal clk16    : std_logic;
     signal clk32    : std_logic;
+	 signal d_sel : std_logic;
+	 signal dff1, dff2, dff3  : std_logic;
 
 --------Maquina de estados------------
 
@@ -88,23 +90,35 @@ begin
 
 -------Debounce do botão BTN0---------
 
-    Debounce :Process(CLK)
-    
-    begin
-    
-        If rising_edge(CLK) then
-        
-            clk2 <= s_SEL_PR;
-            
-            clk2 <= clk2;
-            
-            clk8 <= clk2;
-        
-        end if;
-    
-    end process;
+    FFdebounce1: JK_FF
+        port map(
+            J => s_SEL_PR,
+            k =>s_SEL_PR,
+            s_clk => clk,
+            s_rst => rst,
+            Q => dff1
+        );
+		  
+    FFdebounce2: JK_FF
+        port map(
+            J => dff1,
+            k =>dff1,
+            s_clk => clk,
+            s_rst => rst,
+            Q => dff2
+        );
+		  
+    FFdebounce3: JK_FF
+        port map(
+            J => dff2,
+            k =>dff2,
+            s_clk => clk,
+            s_rst => rst,
+            Q => dff3
+        );
 
-    d_sel <= clk2 and clk4 and clk8; 
+
+    d_sel <= dff1 and dff2 and dff3; 
 
 --------------------------------------
 
