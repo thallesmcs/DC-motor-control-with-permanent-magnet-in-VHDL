@@ -26,10 +26,10 @@ begin
 
         elsif rising_edge(s_clk) then
             case d is
-                    when "00" =>  qs <= '0';
-                    when "10" =>  qs <= '0';
-                    when "01" =>  qs <= '0';
-                    when "11" =>  qs <= qs; 
+                    when "0" =>  qs <= '0';
+                    when "1" =>  qs <= '1';
+                    --when "01" =>  qs <= '0';
+                    --when "11" =>  qs <= qs; 
             end case;
         end if;
     end process;
