@@ -38,6 +38,15 @@ architecture dividendo of divf is
         );
     end component;
 
+    component D_FF
+        port(
+            D : in std_logic;
+            s_clk: in std_logic;
+            s_rst: in std_logic;
+            Q: out std_logic
+        );
+    end component;
+
 begin
 
     df1: JK_FF
@@ -90,28 +99,25 @@ begin
 
 -------Debounce do botão BTN0---------
 
-    FFdebounce1: JK_FF
+    FFdebounce1: D_FF
         port map(
-            J => s_SEL_PR,
-            k =>s_SEL_PR,
+            D => s_SEL_PR,
             s_clk => clk,
             s_rst => rst,
             Q => dff1
         );
 		  
-    FFdebounce2: JK_FF
+    FFdebounce2: D_FF
         port map(
-            J => dff1,
-            k =>dff1,
+            D => dff1,
             s_clk => clk,
             s_rst => rst,
             Q => dff2
         );
 		  
-    FFdebounce3: JK_FF
+    FFdebounce3: D_FF
         port map(
-            J => dff2,
-            k =>dff2,
+            D => dff2,
             s_clk => clk,
             s_rst => rst,
             Q => dff3
