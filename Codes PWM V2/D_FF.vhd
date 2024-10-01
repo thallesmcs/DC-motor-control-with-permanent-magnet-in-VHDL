@@ -25,7 +25,7 @@ begin
             case D is
                     when '0' =>  qs <= '0';
                     when '1' =>  qs <= '1';
-						  when others => qs <= '0';
+		    when others => qs <= '0';
             end case;
         end if;
     end process;
