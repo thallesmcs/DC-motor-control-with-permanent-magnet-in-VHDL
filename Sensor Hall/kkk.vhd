@@ -1,50 +1,54 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
-use IEEE.std_logic_unsigned.all;
+use IEEE.numeric_std.all;
 
 entity sensor_hall is
   port (
-    clk       : in std_logic;
-    val_hall  : in std_logic;
-    rpm       : out std_logic_vector(15 downto 0) -- Ajustado para 16 bits, suportando valores maiores
+    clk       :  in  std_logic;   -- Clock de 50 MHz
+    val_hall  :  in  std_logic;   -- Entrada do sensor Hall
+    rpm       :  out std_logic_vector(15 downto 0)  -- Saída do RPM
   );
 end sensor_hall;
 
 architecture behavior of sensor_hall is
-    signal cont_time    : std_logic_vector(31 downto 0) := (others => '0'); -- Contador de tempo com 32 bits
-    signal val_pos      : std_logic_vector(15 downto 0);
-    signal rpm_calc     : std_logic_vector(15 downto 0); -- Sinal para até 5000 RPM
-    signal hall_last    : std_logic; -- Estado anterior do sensor Hall
-    constant F_CLK      : integer := 50000000; -- Frequência de clock em Hz
-    signal cycles_per_rev : integer; -- Ciclos por revolução
-    
+
+    -- Sinais internos
+    signal cont        : unsigned(31 downto 0) := (others => '0');  -- Contador de ciclos do clock
+    signal time_count  : unsigned(31 downto 0) := (others => '0');  -- Tempo medido entre transições
+    signal rpm_calc    : unsigned(15 downto 0);                      -- Cálculo de RPM
+    signal last_hall   : std_logic := '0';  -- Último estado do sensor Hall
+
+    -- Constantes
+    constant clock_freq : unsigned(31 downto 0) := to_unsigned(50000000, 32);  -- 50 MHz
+
 begin
 
+  -- Processo principal para contar ciclos e calcular RPM
   process(clk)
   begin
-    if (rising_edge(clk)) then
-      -- Incrementa contador de tempo a cada ciclo de clock
-      cont_time <= cont_time + 1;
+    if rising_edge(clk) then
+      -- Se houver uma transição no sensor Hall
+      if (val_hall = '1' and last_hall = '0') then
+        -- Captura o tempo medido e reseta o contador
+        time_count <= cont;
+        cont <= (others => '0');
 
-      -- Detecta borda de descida no sensor Hall (transição de 1 para 0)
-      if (val_hall = '0' and hall_last = '1') then
-          -- Calcula os ciclos por revolução
-          cycles_per_rev <= to_integer(cont_time);
-          
-          -- Calcula RPM: RPM = (60 * F_CLK) / cycles_per_rev
-          if cycles_per_rev > 0 then
-              rpm_calc <= std_logic_vector(to_unsigned((60 * F_CLK) / cycles_per_rev, 16)); -- Ajuste para 16 bits
-          end if;
+        -- Calculo do RPM: RPM = (Clock_Frequency * 60) / time_count
+        if (time_count > 0) then
+          rpm_calc <= (clock_freq * 60) / time_count;
+        end if;
 
-          cont_time <= (others => '0'); -- Reseta contador de tempo
+      else
+        -- Incrementa o contador de ciclos do clock
+        cont <= cont + 1;
       end if;
 
-      -- Armazena o estado atual do sensor Hall
-      hall_last <= val_hall;
-
+      -- Atualiza o estado do último valor do sensor Hall
+      last_hall <= val_hall;
     end if;
   end process;
-  
-  rpm <= rpm_calc; -- Saída de RPM calculado
+
+  -- Saída do valor de RPM calculado
+  rpm <= std_logic_vector(rpm_calc);
 
 end behavior;
