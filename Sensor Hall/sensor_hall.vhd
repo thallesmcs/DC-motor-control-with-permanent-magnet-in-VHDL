@@ -1,24 +1,28 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
---use IEEE.numeric_std.all;
+use IEEE.numeric_std.all;
 use IEEE.std_logic_unsigned.all;
 
-entity sensor_hall is
+entity sensor_hall_1 is
   port (
     clk       :  in  std_logic;
     val_hall  :  in  std_logic;
+	 clk_50 : out std_logic;
     rpm       :  out std_logic_vector(7 downto 0)
   ) ;
-end sensor_hall;
+end sensor_hall_1;
 
-architecture rpm of sensor_hall is
+architecture rpm of sensor_hall_1 is
 
     signal cont      :  std_logic_vector(7 downto 0) := "00000000";
     signal val_pos   :  std_logic_vector(7 downto 0);
-	signal count_f		:  integer range 0 to 50000;
-	constant f_clk			:	integer := 50000;
+	signal count_f		:  integer range 0 to 49999;
+	signal clk_ms : std_logic :='0';
+	constant f_clk			:	integer := 49999;
 
 begin
+
+clk_50<= clk_ms;
 
   process(clk)
   begin
@@ -28,9 +32,9 @@ begin
 
 		if (count_f = f_clk) then
 				count_f <= 0;
-				f_clk <= not f_clk
+				clk_ms <= not clk_ms;
       
-      if (val_hall = '0') then
+      elsif (val_hall = '0') then
           cont <= cont + "00000001";
       
       elsif (val_hall = '1') then 
@@ -42,7 +46,7 @@ begin
         
     end if;
   end process;
-rpm <= val_pos;
+
+rpm <= f_clk / val_pos;
       
 end rpm;
-
