@@ -5,7 +5,7 @@ use IEEE.std_logic_unsigned.all;
 
 entity divisor is 
 	generic(
-		N : integer := 4
+		N : integer := 16
 );
 
 	port(
