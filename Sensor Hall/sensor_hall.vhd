@@ -6,7 +6,8 @@ use IEEE.std_logic_unsigned.all;
 entity sensor_hall is
 
 	generic (
-					R := integer := 16);
+					R : integer := 16;
+					N : integer := 16);
 
   port (
     	clk, rst       	:  	in  std_logic;
@@ -22,7 +23,13 @@ architecture rpm of sensor_hall is
     	signal val_pos   	:  	std_logic_vector(R-1 downto 0);
 		signal count_f		:  	std_logic_vector (R-1 downto 0) := "0000000000000000" ; --integer range 0 to 49999;
 	signal clk_ms 		: 	std_logic := '0';
-	constant f_clk		:	std_logic_vector (R-1 downto 0) := "1100001101001111"; --integer := 49999; -- (110000110100111 =  24999)
+	constant f_clk		:	std_logic_vector (R-1 downto 0) := "1100001101001111"; -- Decimal = 49999;
+	constant rev_ms		:	std_logic_vector (R-1 downto 0) := "1110101001100000"; -- Decimal = 600000
+    signal start 		: std_logic := '0';
+	signal terminou 	: std_logic;
+	signal resto		: std_logic_vector(N-1 downto 0);
+	signal quociente : std_logic_vector(N-1 downto 0);
+
 
 ------------ Divisor de bits-----------
 
@@ -67,17 +74,19 @@ begin
 
 	if(rst ='1') then
 		tempo <= "0000000000000000";
-		val_pos <= '0';
-		rpm = "0000000000000000";
+		val_pos <= "0000000000000000";
+		rpm <= "0000000000000000";
 	
     elsif (rising_edge(clk_ms) or falling_edge(clk_ms)) then 
         if (val_hall = '0') then
-            tempo <= tempo + "00000001";
+            tempo <= tempo + "0000000000000001";
+            start <= '0';
         elsif (val_hall = '1') then 
-            if (tempo > "00000000") then
+            if (tempo > "0000000000000000") then
                 val_pos <= tempo;
+                start <= '1';
             end if; 
-            tempo <= "00000000";
+            tempo <= "0000000000000000";
         end if;
     end if;
 end process;
@@ -102,17 +111,19 @@ end process;
 
 -----------------------------------------------------------
 
+
 	divisor_1: divisor 
 			port map(
-				clk => clk;
-				reset => rst;
-				start => start;
-				divisor  => val_pos;
-				dividendo => f_clk;
-				terminou 	=> terminou;
-				quociente	=> quociente;
-				resto => resto);			
+				clk => clk,
+				reset => rst,
+				start => start,
+				divisor  => val_pos,
+				dividendo => rev_ms,
+				terminou 	=> terminou,
+				quociente	=> quociente,
+				resto => resto);
 
-rpm <= quociente; --Arrumar com modulo de binary divider
+--rpm <= quociente -- Ajustar para o RPM receber a saida do quociente.
+		
 
 end rpm;
