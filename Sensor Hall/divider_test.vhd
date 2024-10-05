@@ -26,7 +26,7 @@ architecture dividindo of divisor is
 	signal r1_next, r1_reg : std_logic_vector(N-1 downto 0);
 	signal rh_next, rh_reg : std_logic_vector(N-1 downto 0);
 	signal rh_aux : std_logic_vector(N-1 downto 0);
-signal q_bit : std_logic;
+    signal q_bit : std_logic;
 
 begin
 
@@ -47,7 +47,6 @@ begin
 	end process;
 
 	--Compara e subtrai
-	--Passo 2 do circuito
 	
 	process(rh_reg)
 		begin
@@ -79,9 +78,8 @@ begin
 						count_next <= N;
 					end if;
 				
-				when count =>	--Faz as divisões
-					--Deslocamento para a esquerda
-					--Passo 3
+				when count =>	   --Faz as divisões
+					               --Deslocamento para a esquerda
 					r1_next <= r1_reg(N-2 downto 0) & q_bit;	--Desloca os valores do dividendo e adiciona o resultado da subtração no bit menos significativo
 					rh_next <= rh_aux(N-2 downto 0) & r1_reg(N-1);	--Desloca o valor subtraido e "puxa" o MSB do dividendo para seu LSB
 					count_next <= count_reg - 1; --Atualiza o valor do contador
@@ -99,27 +97,7 @@ begin
 					terminou <= '1';
 			end case;
 		end process;
-
+        
 		quociente <= r1_reg;
 		resto <= rh_reg;
 end dividindo; 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
