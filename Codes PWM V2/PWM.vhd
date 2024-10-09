@@ -20,7 +20,7 @@ architecture RTL of PWM is
 	signal TIMER       : std_logic_vector (7 downto 0);
 	signal DUTY        : std_logic_vector (7 downto 0) := "00000000";
 	signal P_s        : std_logic_vector (7 downto 0);
-	signal cont_duty  : std_logic_vector (7 downto 0) := "00000000";
+	--signal cont_duty  : std_logic_vector (7 downto 0) := "00000000";
 
 	component divf
 		port (
@@ -41,7 +41,7 @@ architecture RTL of PWM is
 			OUT_CLK => s_OUT_CLK
 			);
 
-		P_s <= P;  -- Lembrar de religar os SW para placa
+		P_s <= P;  -- Para a entrada dos bits do potenciometro para o signal do Duty
 
 		----------------------------Potenciometro--------------------------------		
 		
@@ -94,7 +94,7 @@ architecture RTL of PWM is
 		end if;
 	end process;
 
-	led <= P_s;
+	led <= DUTY;
 	PWM_OUT <= not s_PWM_OUT;
 
 	end RTL;
