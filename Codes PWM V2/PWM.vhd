@@ -94,7 +94,7 @@ architecture RTL of PWM is
 		end if;
 	end process;
 
-	led <= DUTY;
+	led <= P_s;
 	PWM_OUT <= not s_PWM_OUT;
 
 	end RTL;
