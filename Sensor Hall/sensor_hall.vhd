@@ -127,3 +127,68 @@ end process;
 		
 
 end rpm;
+
+
+------------------ Maquina de estados para o Sentido de Rotação  ------------------
+
+    process(clk, rst)
+    begin
+        if rst = '1' then
+            estado_atual <= STOP;
+        elsif rising_edge(clk) then
+            estado_atual  <= proximo_estado ;
+        end if;
+    end process;
+
+    process(estado_atual, val_hall1, val_hall2, val_hall3)
+    begin
+        case estado_atual  is
+            when S1 =>
+                if val_hall2 = '1' and val_hall1 = '0' and val_hall3 = '0' then
+                    proximo_estado  <= S2;
+                    Dir <= "01";  -- direita
+                elsif val_hall3 = '1' and val_hall1 = '0' and val_hall2 = '0' then
+                    proximo_estado  <= S3;
+                    Dir <= "10";  -- esquerda
+                else
+                    proximo_estado  <= STOP;
+                    Dir <= "00";
+                end if;
+
+            when S2 =>
+                if val_hall3 = '1' and val_hall1 = '0' and val_hall2 = '0' then
+                    proximo_estado  <= S3;
+                    Dir <= "01";  -- direita
+                elsif val_hall1 = '1' and val_hall2 = '0' and val_hall3 = '0' then
+                    proximo_estado  <= S1;
+                    Dir <= "10";  -- esquerda
+                else
+                    proximo_estado  <= STOP;
+                    Dir <= "00";
+                end if;
+
+            when S3 =>
+                if val_hall1 = '1' and val_hall2 = '0' and val_hall3 = '0' then
+                    proximo_estado  <= S1;
+                    Dir <= "01";  -- direita
+                elsif val_hall2 = '1' and val_hall1 = '0' and val_hall3 = '0' then
+                    proximo_estado  <= S2;
+                    Dir <= "10";  -- esquerda
+                else
+                    proximo_estado  <= STOP;
+                    Dir <= "00";
+                end if;
+
+            when STOP =>
+                Dir <= "00";                
+
+                if val_hall1 = '1' and val_hall2 = '0' and val_hall3 = '0' then
+                    proximo_estado  <= S1;
+                elsif val_hall2 = '1' and val_hall1 = '0' and val_hall3 = '0' then
+                    proximo_estado  <= S2;
+                elsif val_hall3 = '1' and val_hall1 = '0' and val_hall2 = '0' then
+                    proximo_estado  <= S3;
+                end if;
+        end case;
+
+--------------------------------------------
