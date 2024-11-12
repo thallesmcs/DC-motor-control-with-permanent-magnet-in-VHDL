@@ -1,7 +1,5 @@
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
 use IEEE.std_logic_unsigned.all;
 
 entity bin_bcd is
@@ -12,6 +10,7 @@ end bin_bcd;
 architecture alg_magic of bin_bcd is
 
 begin
+
     process(bin)
         variable i : integer;
         variable temp_bin : STD_LOGIC_VECTOR (15 downto 0);
@@ -40,4 +39,10 @@ begin
         end loop;
         bcd <= bcd_temp;
     end process;
+    
+
+    
+    
+    
+    
 end alg_magic;
