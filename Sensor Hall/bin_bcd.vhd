@@ -6,7 +6,7 @@ use IEEE.std_logic_unsigned.all;
 
 entity bin_bcd is
     Port (  bin : in  STD_LOGIC_VECTOR (15 downto 0);
-            bcd : out STD_LOGIC_VECTOR (15 downto 0)); -- 5 dígitos BCD
+            bcd : out STD_LOGIC_VECTOR (15 downto 0));
 end bin_bcd;
 
 architecture alg_magic of bin_bcd is
