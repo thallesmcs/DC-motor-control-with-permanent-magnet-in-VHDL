@@ -22,39 +22,37 @@ architecture rpm of hall is
     
 ---------------------Funcionamento para rpm receber quociente--------------------------
 
-	signal val_div      : std_logic_vector(15 downto 0) := "0000000000001100";
-	signal val_dendo    : std_logic_vector(15 downto 0) := "1110101001100000";
-	signal quociente1   : std_logic_vector(15 downto 0);
-	signal terminou1    : std_logic;
+	signal val_div      	: std_logic_vector(15 downto 0) := "0000000000001100";
+	signal val_dendo    	: std_logic_vector(15 downto 0) := "1110101001100000";
+	signal quociente1   	: std_logic_vector(15 downto 0);
+	signal terminou1    	: std_logic;
     
 ---------------------------------------------------------------------------------------
 
 -------------------------Logica para medição da Velocidade-------------------------
 
-	signal      tempo       	: std_logic_vector(15 downto 0) := "0000000000000000";
-	signal      val_pos     	: std_logic_vector(15 downto 0) := "0000000000000000";
-	signal      count_f		: std_logic_vector (15 downto 0) := "0000000000000000" ;
-	signal      clk_ms 		: std_logic := '0';
-	constant    f_clk		: std_logic_vector (15 downto 0) := "0110000110101000"; -- Decimal = 24999;
-	constant    rev_ms		: std_logic_vector (15 downto 0) := "1110101001100000"; -- Decimal = 600000
+	signal tempo       	: std_logic_vector(15 downto 0) := "0000000000000000";
+	signal val_pos     	: std_logic_vector(15 downto 0) := "0000000000000000";
+	signal count_f		: std_logic_vector (15 downto 0) := "0000000000000000" ;
+	signal clk_ms 		: std_logic := '0';
+	constant f_clk		: std_logic_vector (15 downto 0) := "0110000110101000"; -- Decimal = 24999;
+	constant rev_ms		: std_logic_vector (15 downto 0) := "1110101001100000"; -- Decimal = 600000
     
 -----------------------------------------------------------------------------------
     
 -----------------------Funcionamento do 7 segmentos-----------------------------
 
-	signal rpm_bin : std_logic_vector(15 downto 0) := "0000000000000000";
-	signal D_1 : std_logic_vector(7 downto 0);
-	signal D_2 : std_logic_vector(7 downto 0);
-	signal D_3 : std_logic_vector(7 downto 0);
-	signal D_4 : std_logic_vector(7 downto 0);
-	signal seg_7 : std_logic_vector(15 downto 0);
-	signal count_2 : integer range 0 to 50_000_000;
-	signal clk_2 : std_logic := '0';
-	constant total_2 : std_logic_vector (17 downto 0) := "011000011010100000";
-	signal an_s : STD_LOGIC_VECTOR(3 downto 0);
-	signal cx_s : STD_LOGIC_VECTOR(7 downto 0);
-	 
-	 --signal SW_s : std_logic_vector(15 downto 0):= "0000000000000000";
+	signal rpm_bin 		: std_logic_vector(15 downto 0) := "0000000000000000";
+	signal D_1 		: std_logic_vector(7 downto 0);
+	signal D_2 		: std_logic_vector(7 downto 0);
+	signal D_3 		: std_logic_vector(7 downto 0);
+	signal D_4 		: std_logic_vector(7 downto 0);
+	signal seg_7 		: std_logic_vector(15 downto 0);
+	signal count_2 		: integer range 0 to 50_000_000;
+	signal clk_2 		: std_logic := '0';
+	constant total_2 	: std_logic_vector (17 downto 0) := "011000011010100000";
+	signal an_s 		: STD_LOGIC_VECTOR(3 downto 0);
+	signal cx_s 		: STD_LOGIC_VECTOR(7 downto 0);
     
 --------------------------------------------------------------------------------
 
