@@ -1,4 +1,4 @@
-Este projeto implmenta PWM em VHDL.
+Este projeto implementa o controle de um motor CC, utilizando modulo de PWM, modulo de monitoramento usando sensor para posição e modulo de controle para integração e ajuste de velocidade ao decorrer do tempo.
 
 Creditos:
 
