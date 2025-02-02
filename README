@@ -1,4 +1,4 @@
-Controle de Motor CC com PWM, Sensor Hall e Módulo de Controle
+###Controle de Motor CC com PWM, Sensor Hall e Módulo de Controle
 
 📌 Descrição do Projeto
 
@@ -66,4 +66,4 @@ Monitore a velocidade do motor e os ajustes em tempo real.
 
 Este projeto demonstra um sistema eficiente e modular para controle de velocidade de um motor CC. A combinação do PWM, sensor Hall e módulo de controle permite um ajuste preciso e dinâmico da velocidade.
 
-🔹 Criado por [Seu Nome ou Equipe]
+🔹 Criado por Thalles Mikael Cunha da Silva
