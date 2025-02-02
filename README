@@ -1,7 +1,69 @@
-Este projeto implementa o controle de um motor CC, utilizando modulo de PWM, modulo de monitoramento usando sensor para posição e modulo de controle para integração e ajuste de velocidade ao decorrer do tempo.
+Controle de Motor CC com PWM, Sensor Hall e Módulo de Controle
 
-Creditos:
+📌 Descrição do Projeto
 
-https://embarcados.com.br/uma-arquitetura-pwm-em-vhdl/
+Este projeto implementa um sistema de controle para um motor de corrente contínua (CC), utilizando:
 
-https://ojs.brazilianjournals.com.br/ojs/index.php/BRJD/article/view/28461
+Módulo de Potência (PWM): Responsável por fornecer a potência necessária ao motor por meio da modulação por largura de pulso (PWM).
+
+Módulo de Monitoramento (Sensor Hall): Realiza a leitura da posição do motor e, a partir dessa informação, monitora sua velocidade.
+
+Módulo de Controle: Integra os módulos anteriores e ajusta dinamicamente a velocidade do motor ao longo do tempo.
+
+Os módulos mencionados são implementados dentro do código em VHDL, estruturados para execução na FPGA Nexys 2.
+
+⚙️ Funcionamento
+
+O Módulo de Potência utiliza sinais PWM para controlar a tensão aplicada ao motor, permitindo ajustes na velocidade de rotação.
+
+O Módulo de Monitoramento usa um sensor Hall para capturar a posição do eixo do motor e calcular a velocidade com base nessas leituras.
+
+O Módulo de Controle recebe os dados do sensor Hall, processa a informação e ajusta o sinal PWM conforme necessário para manter a velocidade desejada.
+
+🛠️ Tecnologias e Componentes Utilizados
+
+FPGA Nexys 2
+
+Xilinx ISE para implementação na FPGA Nexys 2
+
+Vivado 2024.2 para simulações dos códigos
+
+VHDL como linguagem de descrição de hardware
+
+Sensor Hall (módulo de efeito Hall digital)
+
+Motor CC
+
+Fonte de Alimentação
+
+FPGA responsável por integrar os módulos e manter a estabilidade da velocidade.
+
+🔧 Aplicações
+
+Este sistema pode ser utilizado em diversas áreas, como:
+
+Controle de velocidade 
+
+Sistemas robóticos
+
+Ventiladores e exaustores
+
+Automação industrial
+
+🚀 Como Executar o Projeto
+
+Conecte os módulos à FPGA Nexys 2 conforme o esquema elétrico.
+
+Utilize o Xilinx ISE para a implementação na FPGA.
+
+Use o Vivado 2024.2 para simular e validar os códigos.
+
+Ajuste os parâmetros de controle conforme a necessidade.
+
+Monitore a velocidade do motor e os ajustes em tempo real.
+
+📜 Conclusão
+
+Este projeto demonstra um sistema eficiente e modular para controle de velocidade de um motor CC. A combinação do PWM, sensor Hall e módulo de controle permite um ajuste preciso e dinâmico da velocidade.
+
+🔹 Criado por [Seu Nome ou Equipe]
